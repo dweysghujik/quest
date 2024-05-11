@@ -1,7 +1,17 @@
-// Alice should have the initial balance minus tranfer amount
-if (aliceBalanceAfter[0].amount !== ALICE_INITIAL_BALANCE - TRANSFER_AMOUNT)
-  throw new Error("Alice's balance after transfer is incorrect");
-
-// Sponsor should have the initial balance minus gas
-if (sponsorBalanceAfter[0].amount >= SPONSOR_INITIAL_BALANCE)
-  throw new Error("Sponsor's balance after transfer is incorrect");
+function pathSum(root, sum) {
+  if (!root) return [];
+  const result = [];
+  const path = [];
+  const traverse = (node, sum) => {
+    if (!node) return;
+    path.push(node.val);
+    if (!node.left && !node.right && sum === node.val) {
+      result.push([...path]);
+    }
+    traverse(node.left, sum - node.val);
+    traverse(node.right, sum - node.val);
+    path.pop();
+  };
+  traverse(root, sum);
+  return result;
+}
