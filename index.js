@@ -1,18 +1,33 @@
-function maximalSquare(matrix) {
-  if (matrix.length === 0 || matrix[0].length === 0) return 0;
-  const rows = matrix.length;
-  const cols = matrix[0].length;
-  const dp = Array.from({ length: rows + 1 }, () =>
-    Array.from({ length: cols + 1 }, () => 0),
+function totalNQueens(n) {
+  let count = 0;
+  const board = Array.from({ length: n }, () =>
+    Array.from({ length: n }, () => "."),
   );
-  let maxSquare = 0;
-  for (let i = 1; i <= rows; i++) {
-    for (let j = 1; j <= cols; j++) {
-      if (matrix[i - 1][j - 1] === "1") {
-        dp[i][j] = Math.min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]) + 1;
-        maxSquare = Math.max(maxSquare, dp[i][j]);
+  backtrack(0);
+  return count;
+  function backtrack(row) {
+    if (row === n) {
+      count++;
+      return;
+    }
+    for (let col = 0; col < n; col++) {
+      if (isValid(row, col)) {
+        board[row][col] = "Q";
+        backtrack(row + 1);
+        board[row][col] = ".";
       }
     }
   }
-  return maxSquare * maxSquare;
+  function isValid(row, col) {
+    for (let i = 0; i < row; i++) {
+      if (board[i][col] === "Q") return false;
+    }
+    for (let i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+      if (board[i][j] === "Q") return false;
+    }
+    for (let i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++) {
+      if (board[i][j] === "Q") return false;
+    }
+    return true;
+  }
 }
